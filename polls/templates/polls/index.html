@@ -1,3 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+
+<h1>This is a heading</h1>
+<p>This is a paragraph.</p>
+
+
+{% load static %}
 {% if latest_question_list %}
     <ul>
     {% for question in latest_question_list %}
@@ -8,3 +20,7 @@
 {% else %}
     <p>No polls are avalible.</p>
 {% endif %}
+
+<img src="{% static 'questionmark.png'%}" alt="">
+</body>
+</html>

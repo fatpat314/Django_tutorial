@@ -1,6 +1,6 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.views import generic
 # from django.template import loader
 # from django.http import http404
@@ -9,11 +9,33 @@ from django.views import generic
 # from django.shortcuts import render
 from .models import Choice, Question
 from django.utils import timezone
+from .forms import FriendlyForm, QuestionCreateForm
+from django.views.generic.edit import CreateView
+
+
+def form_demo(request):
+    form = FriendlyForm()
+    context = { 'form': form }
+    return render(request, 'polls/form_demo.html', context)
+
+class QuestionCreateView(CreateView):
+    def get(self, request, *args, **kwargs):
+        context = {'form': QuestionCreateForm()}
+        return render(request, 'polls/new.html', context)
+
+    def post(self, request, *args, **kwargs):
+        form = QuestionCreateForm(retuest.POST)
+        if form.is_valid():
+            question = form.save()
+            return HttpResponseRedirect(reverse_lazy('polls:detail',args=[question.id]))
+        return render(request, 'polls/new.html', {'form': form})
+
+
 
 
 
 class IndexView(generic.ListView):
-    template_name = 'poll/index.html'
+    template_name = 'polls/index.html'
     context_object_name = 'latest_question_list'
 
     def get_queryset(self):
@@ -52,6 +74,9 @@ def vote(request, question_id):
         # user hits the Back button.
 
     return HttpResponseRedirect(reverse('polls:results', args=(question.id)))
+
+
+
 
 
 # Create your views here.

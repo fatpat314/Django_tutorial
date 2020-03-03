@@ -12,5 +12,8 @@ urlpatterns = [
 
     # path('specifics/<int:question_id>/', views.detail, name='detail'),
 
+    path('form/', views.form_demo, name='form-demo'), #Polls/form/
+    path('new/', views.QuestionCreateView.as_view(), name='new')
+
 
 ]
